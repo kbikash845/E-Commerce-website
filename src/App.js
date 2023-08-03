@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Headers from './Component/Layout/Headers'
 import Product from './Component/Product/Product'
 import Footer from './Component/Footer/Footer'
@@ -7,17 +7,32 @@ import { Routes ,Route} from 'react-router-dom'
 import About from './About/About'
 import Home from './Component/HomePage/Home'
 import ContactUs from './Component/ContactUs-Page/ContactUs'
+import AuthForm from './Authentication/AuthForm'
+import AuthContext from './Component/Store/auth-Context'
+// import ProfileForm from './Authentication/Profile/ProfileForm'
+import UserProfile from './Authentication/Profile/UserProfile'
 
 
 function App() {
+  const authCtx=useContext(AuthContext);
+
   return (
     <CartProvider>
       <Headers/>
       <Routes>
-        <Route path='Product' element={<Product/>}/>
+        { authCtx.isLonggedIn && (
+          <Route path='Product' element={<Product/>}/>
+        )}
+        
       <Route path='about' element={<About/>}/>
       <Route path='Home'element={<Home/>}/>
       <Route path='ContactUs' element={<ContactUs/>}/>
+      <Route path='/auth' element={<AuthForm/>}/>
+      {authCtx.isLonggedIn && (
+         <Route path='/profile' element={<UserProfile/>}/>
+      )}
+      
+      <Route path='*' element={<Home />} /> {/* Default route */}
       </Routes>
       
       <Footer/>

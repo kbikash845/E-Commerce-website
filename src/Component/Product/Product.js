@@ -1,6 +1,7 @@
 import React ,{Fragment, useContext} from 'react';
 import './Product.css';
 import CartContext from '../Store/Cart-Context';
+import axios from "axios";
 
 
 
@@ -61,17 +62,31 @@ const cartElements = [
 function Product() {
     
    const CartCtx= useContext(CartContext)
+   const enterEmail=localStorage.getItem('email');
+   const updatedEmail=enterEmail ?enterEmail.replace("@","").replace('.',''):'';
    
-   const btnClickHandler=(item)=>{
+   async function  btnClickHandler(item){
     CartCtx.addItem({
         id:item.id,
         title:item.title,
         price:item.price,
         Image:item.imageUrl,
-        quantity:item.quantity,
         amount:item.amount
     });
-   }
+
+    try{
+
+        const response=await axios.post(`https://crudcrud.com/api/3fde6f8de3e448cf8d9fe027aa59732f/${updatedEmail}`,item
+
+        );
+        console.log(response.data);
+    } catch (error) {
+      console.log("AxiosError:", error);
+    }
+    }
+
+
+   
     
 
   return (
