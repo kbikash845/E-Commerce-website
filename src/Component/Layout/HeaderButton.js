@@ -1,46 +1,47 @@
-import { useContext, useState} from 'react'
-import CartIcon from '../Cart/CartIcon';
-import classes from './HeaderButton.module.css';
-import { Button,Modal } from 'antd';
-import Cart from '../Cart/Cart';
-import CartContext from '../Store/Cart-Context';
 
+import { useContext, useEffect, useState } from "react";
 
+import Button from "react-bootstrap/Button";
+import classes from './HeaderButton.module.css'
+import CartContext from "../Store/Cart-Context";
+import CartIcon from "../Cart/CartIcon";
 
-function HeaderButton() {
-  const cartCtx=useContext(CartContext);
-  const numberOfCartItems=cartCtx.items.reduce((currNumber,item)=>{
-  return currNumber+item.amount;
-},0);
-  
+const HeaderButton= (props) => {
+  const [btnIsHighLighted, setbtnIsHighLighted] = useState(false);
+  const cartCtx = useContext(CartContext)
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  console.log("windows",window)
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  return(
-    <div>
-    <Button onClick={showModal} className={classes.button}>
-      <span className={classes.icon}>
-          <CartIcon/>
-      </span>
-      <span> Your Cart</span>
-      <span className={classes.badge}>{numberOfCartItems}</span>
-    </Button>
-    <Modal title="Order Details..."  footer={null}open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <Cart/>
-        </Modal>
-    </div>
-  )
- 
-  
-}
+  const { items } = cartCtx;
+  const numberOfCartItems = cartCtx.items.reduce((currNumber, item) => {
+    return currNumber + item.amount;
+  }, 0);
+
+  const btnClasses = `${classes.button} ${
+    btnIsHighLighted ? classes.bump : ""
+  }`;
+  useEffect(() => {
+    if (items.length === 0) {
+      return;
+    }
+    setbtnIsHighLighted(true);
+
+    const timer = setTimeout(() => {
+      setbtnIsHighLighted(false);
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [items]);
+
+  return (
+    <>
+      <Button variant="danger" onClick={props.onClick} className={btnClasses}>
+        <span className={classes.icon}><CartIcon/></span>
+        <span className={classes.title}>Cart</span>
+        {/* <span className={classes.badge}>{numberOfCartItems}</span> */}
+      </Button>{" "}
+    </>
+  );
+};
 
 export default HeaderButton

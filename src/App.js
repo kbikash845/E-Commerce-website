@@ -1,5 +1,6 @@
-import React, { useContext } from 'react'
+import React, { useContext ,useState} from 'react'
 import Headers from './Component/Layout/Headers'
+import Cart from './Component/Cart/Cart'
 import Product from './Component/Product/Product'
 import Footer from './Component/Footer/Footer'
 import CartProvider from './Component/Store/CardProvider'
@@ -14,11 +15,22 @@ import UserProfile from './Authentication/Profile/UserProfile'
 
 
 function App() {
+  const [cartIsShown, setCartIsShown] = useState(false);
   const authCtx=useContext(AuthContext);
+  
+
+  const showCartHandler = () => {
+    setCartIsShown(true);
+  };
+
+  const hideCartHandler = () => {
+    setCartIsShown(false);
+  };
 
   return (
     <CartProvider>
-      <Headers/>
+      <Headers  onShowCart={showCartHandler}/>
+      {cartIsShown && <Cart onClose={hideCartHandler} />}
       <Routes>
         { authCtx.isLonggedIn && (
           <Route path='Product' element={<Product/>}/>

@@ -5,7 +5,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import AuthContext from '../Store/auth-Context';
 
 
-function Headers() {
+function Headers(props) {
   const authCtx=useContext(AuthContext);
   const isLogged=authCtx.isLonggedIn
 
@@ -42,7 +42,7 @@ function Headers() {
          <NavLink to="/" onClick={longoutHandler} className="nav"> LogOut</NavLink>
         )}
         { !isHomePage && !isAboutPage && !isContactus && isLogged && (
-           <HeaderButton/>
+           <HeaderButton onClick={props.onShowCart}/>
         )}
            
         </div>

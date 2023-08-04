@@ -1,27 +1,20 @@
-import React, { useContext, useEffect, useState } from 'react'
-import classes from './Cart.module.css'
-import CartContext from '../Store/Cart-Context';
+import React, { useContext, useEffect, useState } from "react";
+import classes from "./Cart.module.css";
+import Modal from "../UI/Modal";
+import Button from "react-bootstrap/Button";
+import CartContext from "../Store/Cart-Context";
+import CartItem from "./CartItem";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Alert } from "react-bootstrap";
 import axios from "axios";
 
-function Cart() {
 
-  const CartCtx=useContext(CartContext);
-  const [cartItems, setCartItems] = useState([])
 
-    // const hasItems= CartCtx.items.length > 0;
-  
-   
-    // const cartItemAddHandler=(item)=>{
-    //   CartCtx.addItem(item);
-    // }
-
-  const messagealert=()=>{
-    alert("Thank u for purchage")
-  }
- useEffect(() => {
-    fetchCartItems();
-  }, []);
-
+function Cart(props) {
+  const cartCtx = useContext(CartContext);
+  const [showAlert, setShowAlert] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
 
   const enteredEmail = localStorage.getItem("email");
   const updatedEmail = enteredEmail
@@ -30,7 +23,7 @@ function Cart() {
 
   async function fetchCartItems() {
     const response = await axios.get(
-      `https://crudcrud.com/api/3fde6f8de3e448cf8d9fe027aa59732f/${updatedEmail}`
+      `https://crudcrud.com/api/b710a0e976da4fe0b383e7030b92d520/${updatedEmail}`
     );
     console.log(response.data);
     const cartItems = response.data.map((item) => {
@@ -42,66 +35,83 @@ function Cart() {
         amount: item.amount,
       };
     });
-    // CartCtx.setCart(cartItems); 
     setCartItems(cartItems);
     console.log(cartItems);
   }
 
- 
+  useEffect(() => {
+    fetchCartItems();
+  }, []);
 
   //totalAmount is calculated depend upon cartItems
   const totalAmount = cartItems.reduce((total, item) => {
     return total + item.price;
   }, 0);
 
-  async function cartItemRemoveHandler(id){
-    await axios.delete(`https://crudcrud.com/api/3fde6f8de3e448cf8d9fe027aa59732f/${updatedEmail}/${id}`)
-   
-   // CartCtx.removeItem(id);
-   fetchCartItems()
- }
- 
+  const hasItems = cartItems.length > 0;
 
- 
+  async function cartItemRemoveHandler(id) {
+    console.log(id, updatedEmail);
+
+    await axios.delete(
+      `https://crudcrud.com/api/b710a0e976da4fe0b383e7030b92d520/${updatedEmail}/${id}`
+    );
+    toast.error("Item is deleted successfully!");
+    // cartCtx.removeItem(id)
+    fetchCartItems();
+  }
+
+  const cartItemList = cartItems.map((item) => (
+    <CartItem
+      key={item.id}
+      name={item.name}
+      amount={item.amount}
+      price={item.price}
+      image={item.image}
+      onRemove={() => cartItemRemoveHandler(item.id)}
+    />
+  ));
+
+  const OrderHandler = () => {
+    setShowAlert(true);
+  };
 
   return (
-    <div className={classes.cartContainer}>
-     
-    <h2 style={{textAlign:"center"}}>Cart</h2>
-    <div className={classes.cartScroll}>
-     <table>
-      <thead>
-      <tr>
-          <th>Item</th>
-          <th>Title</th>
-          <th>Price</th>
-          {/* <th>Quantity</th> */}
-          <th>Remove:</th>
-      </tr >
-      </thead>
-      <tbody>
-      {cartItems.map((item)=>(
-        <tr key={item.id} className={classes.main}>
-          <td><img src={item.image} alt="bikash" width="60px" height="60px"/></td>
-          <td>{item.name}</td>
-          <td>${item.price}</td>
-          {/* <td>{item.quantity}</td> */}
-         <td><button  className={classes.btnRemove} onClick={() => cartItemRemoveHandler (item.id)}>Remove</button></td>
-        </tr>
-      ))}
-        </tbody>
-      </table>
-      </div>
-      <div className={classes.Amount}>
-      <p>Total Amount :-</p>
-      <p> ${totalAmount}</p>
-    </div>
-    <div>
-      <button className={classes.purchase} onClick={messagealert}>Purchase</button>
-    </div> 
-
-  </div>
-  )
+    <>
+      <Modal onClose={props.onClose}>
+        <h2 style={{textAlign:"center"}}>Cart</h2>
+      
+        {cartItems.length > 0 ? (
+          <ul className={classes["cart-items"]}>{cartItemList}</ul>
+        ) : (
+          <p className={classes["empty-text"]}>Your cart is empty.</p>
+        )}
+        <div className={classes.total}>
+          <span>Total Amount</span>
+          <span>₹{totalAmount}</span>
+        </div>
+        <div className={classes.actions}>
+      
+            <Button variant="warning" onClick={props.onClose}>
+              Close
+            </Button>
+        
+          <Button variant="danger" onClick={OrderHandler}>
+            Order
+          </Button>{" "}
+        </div>
+        <Alert
+          variant="success"
+          show={showAlert}
+          onClose={() => setShowAlert(false)}
+          dismissible
+        >
+          Thanks for shopping with us!.
+        </Alert>
+      </Modal>
+      <ToastContainer theme="colored" />
+    </>
+  );
 }
 
-export default Cart
+export default Cart;

@@ -2,60 +2,36 @@ import React ,{Fragment, useContext} from 'react';
 import './Product.css';
 import CartContext from '../Store/Cart-Context';
 import axios from "axios";
-
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 
 const cartElements = [
 
-
     {
-    id:1,
-    title: 'Colors',
-    
-    price: 100,
-    
-    imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%201.png',
-    
-    quantity: 2,
-    
-    },
-    
-    {
-    id:2,
-    title: 'Black and white Colors',
-    
-    price: 50,
-    
-    imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%202.png',
-    
-    quantity: 3,
-    
-    },
-    
-    {
-    id:3,
-
-    title: 'Yellow and Black Colors',
-    
-    price: 70,
-    
-    imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%203.png',
-    
-    quantity: 1,
-    
+        id:1,
+        title: 'Colors',
+        price: 100,
+        imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%201.png',
     },
     {
-    
-        id:4,
-        title: 'Red and Black Colors',
-        
+        id:2,
+        title: 'Black and white Colors',
+        price: 50,
+        imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%202.png',
+    },
+    {
+        id:3,
+        title: 'Yellow and Black Colors',
         price: 70,
-        
         imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%203.png',
-        
-        quantity: 1,
-        
-        }
+    },
+    {
+        id:4,
+        title: 'Blue Color',
+        price: 100,
+        imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%204.png',
+    }
     
     ]
 
@@ -73,10 +49,10 @@ function Product() {
         Image:item.imageUrl,
         amount:item.amount
     });
-
+  toast.success("Item Added Successfully ")
     try{
 
-        const response=await axios.post(`https://crudcrud.com/api/3fde6f8de3e448cf8d9fe027aa59732f/${updatedEmail}`,item
+        const response=await axios.post(`https://crudcrud.com/api/b710a0e976da4fe0b383e7030b92d520/${updatedEmail}`,item
 
         );
         console.log(response.data);
@@ -110,7 +86,18 @@ function Product() {
 <div className='btn3'>
     <button className='btn4' >Purchase</button>
 </div>
-
+<ToastContainer 
+position="bottom-right"
+autoClose={500}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="colored"
+/>
 </Fragment>
   )
 }
