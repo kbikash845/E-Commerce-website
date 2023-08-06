@@ -23,7 +23,7 @@ function Cart(props) {
 
   async function fetchCartItems() {
     const response = await axios.get(
-      `https://crudcrud.com/api/b710a0e976da4fe0b383e7030b92d520/${updatedEmail}`
+      `https://crudcrud.com/api/fe76d1c016034f779cfb601673c56182/${updatedEmail}`
     );
     console.log(response.data);
     const cartItems = response.data.map((item) => {
@@ -54,7 +54,7 @@ function Cart(props) {
     console.log(id, updatedEmail);
 
     await axios.delete(
-      `https://crudcrud.com/api/b710a0e976da4fe0b383e7030b92d520/${updatedEmail}/${id}`
+      `https://crudcrud.com/api/fe76d1c016034f779cfb601673c56182/${updatedEmail}/${id}`
     );
     toast.error("Item is deleted successfully!");
     // cartCtx.removeItem(id)
