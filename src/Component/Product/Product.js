@@ -52,7 +52,7 @@ function Product() {
   toast.success("Item Added Successfully ")
     try{
 
-        const response=await axios.post(`https://crudcrud.com/api/fe76d1c016034f779cfb601673c56182/${updatedEmail}`,item
+        const response=await axios.post(`https://crudcrud.com/api/bf355cb525c64fbf859b1308cc5dcfec/${updatedEmail}`,item
 
         );
         console.log(response.data);

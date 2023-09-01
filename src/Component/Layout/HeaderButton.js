@@ -11,9 +11,9 @@ const HeaderButton= (props) => {
   const cartCtx = useContext(CartContext)
 
   const { items } = cartCtx;
-  const numberOfCartItems = cartCtx.items.reduce((currNumber, item) => {
-    return currNumber + item.amount;
-  }, 0);
+  // const numberOfCartItems = cartCtx.items.reduce((currNumber, item) => {
+  //   return currNumber + item.amount;
+  // }, 0);
 
   const btnClasses = `${classes.button} ${
     btnIsHighLighted ? classes.bump : ""
