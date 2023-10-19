@@ -36,7 +36,7 @@ function ContactUs() {
 
         }
         try {
-            const response = await fetch("https://eccomrce-website-default-rtdb.firebaseio.com/contactus.json", {
+            const response = await fetch("https://e-comerce-app-2be24-default-rtdb.firebaseio.com/contactus.json", {
               method: "POST",
               body: JSON.stringify(contactData),
               headers: {
